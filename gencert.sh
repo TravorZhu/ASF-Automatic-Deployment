@@ -1,8 +1,17 @@
 #!/bin/sh
 
+finish()
+{
+    echo "ArchiFarmSteam已经自动部署完成"
+    echo "如果部署过程中有问题请到https://github.com/TravorZhu/ASF-Automatic-Deployment/issues反馈"
+    echo "访问http://127.0.0.1:1242 以配置ASF"
+    echo "bash run.sh               运行ASF"
+    echo "bash run_background.sh    后台运行ASF"
+    echo "bash stop.sh              停止ASF"
+    echo "tail asf.log              显示后台运行的日志"
+}
 
-
-debian()
+ubuntu()
 {
     echo "Install dotnet and ngnix..."
     apt-get -y install wget screen unzip tar nginx curl
@@ -211,6 +220,7 @@ RHEL()
     echo "dotnet ./ASF/ArchiSteamFarm.dll" > run.sh
     echo -e "sudo kill -9 \$\(ps x | awk '/[A]rchiSteamFarm/{print \$1}'\)" > stop.sh
     echo "nohub dotnet ./ASF/ArchiSteamFarm.dll > asf.log 2>&1 &" > run_background.sh
+
 }
 
 
@@ -223,11 +233,12 @@ if grep -Eqii "CentOS" /etc/issue || grep -Eq "CentOS" /etc/*-release; then
     elif grep -Eqi "Fedora" /etc/issue || grep -Eq "Fedora" /etc/*-release; then
         RHEL
     elif grep -Eqi "Debian" /etc/issue || grep -Eq "Debian" /etc/*-release; then
-        debian
+        ubuntu
     elif grep -Eqi "Ubuntu" /etc/issue || grep -Eq "Ubuntu" /etc/*-release; then
-        debian
+        ubuntu
     elif grep -Eqi "Raspbian" /etc/issue || grep -Eq "Raspbian" /etc/*-release; then
-        debian
+        ubuntu
     else
         echo "Unknown Operate System"
     fi
+
