@@ -124,6 +124,8 @@ ubuntu()
     echo "dotnet ./ASF/ArchiSteamFarm.dll" > run.sh
     echo -e "sudo kill -9 \$\(ps x | awk '/[A]rchiSteamFarm/{print \$1}'\)" > stop.sh
     echo "nohub dotnet ./ASF/ArchiSteamFarm.dll > asf.log 2>&1 &" > run_background.sh
+
+    finish
 }
 
 RHEL()
@@ -245,7 +247,8 @@ RHEL()
     echo "dotnet ./ASF/ArchiSteamFarm.dll" > run.sh
     echo -e "sudo kill -9 \$\(ps x | awk '/[A]rchiSteamFarm/{print \$1}'\)" > stop.sh
     echo "nohub dotnet ./ASF/ArchiSteamFarm.dll > asf.log 2>&1 &" > run_background.sh
-
+    
+    finish
 }
 
 
