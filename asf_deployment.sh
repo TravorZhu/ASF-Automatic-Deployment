@@ -2,7 +2,8 @@
 
 finish()
 {
-    echo "ArchiFarmSteam已经自动部署完成"
+    echo "--------------------------------------------------------------------------------------"
+    echo "ArchiSteamFarm已经自动部署完成"
     echo "如果部署过程中有问题请到https://github.com/TravorZhu/ASF-Automatic-Deployment/issues反馈"
     echo "访问http://127.0.0.1:1242 以配置ASF"
     echo "bash run.sh               运行ASF"
@@ -13,27 +14,9 @@ finish()
 
 ubuntu()
 {
-    echo "Install dotnet and ngnix..."
+    echo "Install ngnix and dependence..."
     apt-get -y install wget screen unzip tar nginx curl
-    apt-get -y install liblttng-ust0 libssl1.0.0 libkrb5-3 zlib1g 
-    if grep -Eqi "14" /etc/issue || grep -Eq "14" /etc/*-release; then
-        apt-get -y install libcurl3 libicu52
-    elif grep -Eqi "16" /etc/issue || grep -Eq "16" /etc/*-release; then
-        apt-get -y install libcurl3 libicu55
-    elif grep -Eqi "17" /etc/issue || grep -Eq "17" /etc/*-release; then
-        apt-get -y install libicu57
-    elif grep -Eqi "18" /etc/issue || grep -Eq "18" /etc/*-release; then
-        apt-get -y install libicu60  libcurl4
-    fi
-    curl -sSL -o dotnet.tar.gz https://aka.ms/dotnet-sdk-2.0.0-linux-x64
-    mkdir -p ~/dotnet && tar zxf dotnet.tar.gz -C ~/dotnet
-    cp -rf ~/dotnet /etc/
-    export PATH=$PATH:/etc/dotnet
-    echo -e "export PATH=\$PATH:/etc/dotnet">> ~/.bashrc
-    source ~/.bashrc
-
-    rm -rf dotnet.tar.gz
-    rm -rf ~/dotnet
+    apt-get -y install libicu-dev
 
     echo "Install ASF..."
     ASF_version=`curl -s https://api.github.com/repos/JustArchiNET/ArchiSteamFarm/releases/latest  | grep "tag_name" | awk -F "\"" '{print $4}'`
@@ -41,9 +24,11 @@ ubuntu()
 
     unzip ASF-linux-x64.zip -d ./ASF
 
+    chmod +x ./ASF/ArchiSteamFarm
+
     rm -f ASF-linux-x64.zip
 
-    echo "Configuration nginx"
+    echo "Configuration nginx..."
     service nginx stop
     SUBJECT="/C=CN/ST=Mars/L=iTranswarp/O=iTranswarp/OU=iTranswarp/CN=steamcommunity.com"
 
@@ -121,9 +106,9 @@ ubuntu()
     touch stop.sh
     touch run_back.sh
 
-    echo "dotnet ./ASF/ArchiSteamFarm.dll" > run.sh
+    echo "./ASF/ArchiSteamFarm" > run.sh
     echo -e "sudo kill -9 \$\(ps x | awk '/[A]rchiSteamFarm/{print \$1}'\)" > stop.sh
-    echo "nohub dotnet ./ASF/ArchiSteamFarm.dll > asf.log 2>&1 &" > run_background.sh
+    echo "nohub ./ASF/ArchiSteamFarm > asf.log 2>&1 &" > run_background.sh
 
     finish
 }
@@ -149,23 +134,25 @@ gpgkey=https://nginx.org/keys/nginx_signing.key" >> /etc/yum.repos.d/nginx.repo
 
     yum-config-manager --enable nginx-mainline
     yum -y install nginx
-    echo "Install dotnet..."
+    echo "Install Dependence..."
     yum -y install libunwind libicu wget screen unzip tar 
-    curl -sSL -o dotnet.tar.gz https://aka.ms/dotnet-sdk-2.0.0-linux-x64
-    mkdir -p ~/dotnet && tar zxf dotnet.tar.gz -C ~/dotnet
-    cp -rf ~/dotnet /etc/
-    export PATH=$PATH:/etc/dotnet
-    echo -e "export PATH=\$PATH:/etc/dotnet">> ~/.bashrc
-    source ~/.bashrc
+    # curl -sSL -o dotnet.tar.gz https://aka.ms/dotnet-sdk-2.0.0-linux-x64
+    # mkdir -p ~/dotnet && tar zxf dotnet.tar.gz -C ~/dotnet
+    # cp -rf ~/dotnet /etc/
+    # export PATH=$PATH:/etc/dotnet
+    # echo -e "export PATH=\$PATH:/etc/dotnet">> ~/.bashrc
+    # source ~/.bashrc
 
-    rm -rf dotnet.tar.gz
-    rm -rf ~/dotnet
+    # rm -rf dotnet.tar.gz
+    # rm -rf ~/dotnet
     
     echo "Install ASF..."
     ASF_version=`curl -s https://api.github.com/repos/JustArchiNET/ArchiSteamFarm/releases/latest  | grep "tag_name" | awk -F "\"" '{print $4}'`
     wget https://github.com/JustArchiNET/ArchiSteamFarm/releases/download/$ASF_version/ASF-linux-x64.zip
 
     unzip ASF-linux-x64.zip -d ./ASF
+
+    chmod +x ./ASF/ArchiSteamFarm
 
     rm -f ASF-linux-x64.zip
 
@@ -244,9 +231,9 @@ gpgkey=https://nginx.org/keys/nginx_signing.key" >> /etc/yum.repos.d/nginx.repo
     touch stop.sh
     touch run_back.sh
 
-    echo "dotnet ./ASF/ArchiSteamFarm.dll" > run.sh
+    echo "./ASF/ArchiSteamFarm" > run.sh
     echo -e "sudo kill -9 \$\(ps x | awk '/[A]rchiSteamFarm/{print \$1}'\)" > stop.sh
-    echo "nohub dotnet ./ASF/ArchiSteamFarm.dll > asf.log 2>&1 &" > run_background.sh
+    echo "nohub ./ASF/ArchiSteamFarm > asf.log 2>&1 &" > run_background.sh
     
     finish
 }
