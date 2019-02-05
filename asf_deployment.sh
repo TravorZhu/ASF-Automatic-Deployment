@@ -31,11 +31,17 @@ ubuntu()
     export PATH=$PATH:/etc/dotnet
     echo -e "export PATH=\$PATH:/etc/dotnet">> ~/.bashrc
     source ~/.bashrc
+
+    rm -rf dotnet.tar.gz
+    rm -rf ~/dotnet
+
     echo "Install ASF..."
     ASF_version=`curl -s https://api.github.com/repos/JustArchiNET/ArchiSteamFarm/releases/latest  | grep "tag_name" | awk -F "\"" '{print $4}'`
     wget https://github.com/JustArchiNET/ArchiSteamFarm/releases/download/$ASF_version/ASF-linux-x64.zip
 
     unzip ASF-linux-x64.zip -d ./ASF
+
+    rm -f ASF-linux-x64.zip
 
     echo "Configuration nginx"
     service nginx stop
@@ -76,6 +82,13 @@ ubuntu()
     echo "Trust CA certificate"
     cp -f ca.crt /usr/local/share/ca-certificates
     update-ca-certificates
+
+    rm -rf demoCA
+    rm -rf ca.crt
+    rm -rf ca.key
+    rm -rf server.csr
+    rm -rf server.key
+    rm -rf server.crt
 
     touch /etc/nginx/conf.d/steamcommunity.conf
     echo -e "
@@ -142,11 +155,17 @@ RHEL()
     export PATH=$PATH:/etc/dotnet
     echo -e "export PATH=\$PATH:/etc/dotnet">> ~/.bashrc
     source ~/.bashrc
+
+    rm -rf dotnet.tar.gz
+    rm -rf ~/dotnet
+    
     echo "Install ASF..."
     ASF_version=`curl -s https://api.github.com/repos/JustArchiNET/ArchiSteamFarm/releases/latest  | grep "tag_name" | awk -F "\"" '{print $4}'`
     wget https://github.com/JustArchiNET/ArchiSteamFarm/releases/download/$ASF_version/ASF-linux-x64.zip
 
     unzip ASF-linux-x64.zip -d ./ASF
+
+    rm -f ASF-linux-x64.zip
 
     echo "Configuration nginx"
     service nginx stop
@@ -185,6 +204,12 @@ RHEL()
     echo "Trust CA certificate"
     cp -f ca.crt /etc/pki/ca-trust/source/anchors
     /bin/update-ca-trust
+
+    rm -rf ca.crt
+    rm -rf ca.key
+    rm -rf server.csr
+    rm -rf server.key
+    rm -rf server.crt
 
     touch /etc/nginx/conf.d/steamcommunity.conf
     echo -e "
@@ -241,3 +266,4 @@ if grep -Eqii "CentOS" /etc/issue || grep -Eq "CentOS" /etc/*-release; then
     else
         echo "Unknown Operate System"
     fi
+
