@@ -2,14 +2,18 @@
 
 finish()
 {
-    echo "--------------------------------------------------------------------------------------"
-    echo "ArchiSteamFarm已经自动部署完成"
-    echo "如果部署过程中有问题请到https://github.com/TravorZhu/ASF-Automatic-Deployment/issues反馈"
-    echo "访问http://127.0.0.1:1242 以配置ASF"
-    echo "bash run.sh               运行ASF"
-    echo "bash run_background.sh    后台运行ASF"
-    echo "bash stop.sh              停止ASF"
-    echo "tail asf.log              显示后台运行的日志"
+    echo "---------------------------------------------------------------------------------------"
+    echo "|                        ArchiSteamFarm已经自动部署完成                                 |"
+    echo "|-------------------------------------------------------------------------------------|"
+    echo "|如果部署过程中有问题请到https://github.com/TravorZhu/ASF-Automatic-Deployment/issues反馈|"
+    echo "|-------------------------------------------------------------------------------------|"
+    echo "|访问http://127.0.0.1:1242 以配置ASF                                                   |"
+    echo "|-------------------------------------------------------------------------------------|"
+    echo "|bash run.sh               运行ASF                                                     |"
+    echo "|bash run_background.sh    后台运行ASF                                                 |"
+    echo "|bash stop.sh              停止ASF                                                     |"
+    echo "|tail asf.log              显示后台运行的日志                                           |"
+    echo "---------------------------------------------------------------------------------------"
 }
 
 ubuntu()
@@ -75,7 +79,6 @@ ubuntu()
     rm -rf server.key
     rm -rf server.crt
 
-    touch /etc/nginx/conf.d/steamcommunity.conf
     echo -e "
         server {
             listen 443 ssl;
@@ -95,16 +98,11 @@ ubuntu()
     echo "127.0.0.1 steamcommunity.com
     127.0.0.1 www.steamcommunity.com" >> /etc/hosts
 
-    touch ./ASF/config/ASF.json
     
     echo -e "{
   \"CurrentCulture\": \"zh-CN\",
   \"IPC\": true}
   " > ./ASF/config/ASF.json
-
-    touch run.sh
-    touch stop.sh
-    touch run_back.sh
 
     echo "./ASF/ArchiSteamFarm" > run.sh
     echo -e "sudo kill -9 \$\(ps x | awk '/[A]rchiSteamFarm/{print \$1}'\)" > stop.sh
@@ -200,7 +198,6 @@ gpgkey=https://nginx.org/keys/nginx_signing.key" >> /etc/yum.repos.d/nginx.repo
     rm -rf server.key
     rm -rf server.crt
 
-    touch /etc/nginx/conf.d/steamcommunity.conf
     echo -e "
         server {
             listen 443 ssl;
@@ -219,17 +216,11 @@ gpgkey=https://nginx.org/keys/nginx_signing.key" >> /etc/yum.repos.d/nginx.repo
 
     echo "127.0.0.1 steamcommunity.com
     127.0.0.1 www.steamcommunity.com" >> /etc/hosts
-
-    touch ./ASF/config/ASF.json
     
     echo -e "{
   \"CurrentCulture\": \"zh-CN\",
   \"IPC\": true}
   " > ./ASF/config/ASF.json
-
-    touch run.sh
-    touch stop.sh
-    touch run_back.sh
 
     echo "./ASF/ArchiSteamFarm" > run.sh
     echo -e "sudo kill -9 \$\(ps x | awk '/[A]rchiSteamFarm/{print \$1}'\)" > stop.sh
